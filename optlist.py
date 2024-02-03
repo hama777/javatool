@@ -1,19 +1,12 @@
 #  OpenJDKのソース globals.hpp から起動オプションの一覧を作成する
 
 import os
-#import sys
-#import time
 import re
-#import datetime
-#import locale
-#import subprocess
-#import argparse
 from datetime import timedelta
 
 version = "1.00"     
 
 appdir = os.path.dirname(os.path.abspath(__file__))
-#inputfile = appdir + "/globals.hpp"
 filelist = appdir + "/filelist.txt"
 outfile = appdir + "/optlist.htm"
 templatefile = appdir + "./optlist_templ.htm"
@@ -39,9 +32,7 @@ def read_globalfile() :
             globallist.append(line.strip())
 
 def analize_global(infile) :
-#    re_product = "^ *product("
     re_comment  = r'"(.*)"'
-#    re_name2 = "^\*\*-XX:[+-]*(.*?)$"
 
     f = open(infile, 'r')
     filename = os.path.basename(infile)
@@ -60,7 +51,6 @@ def analize_global(infile) :
             option_info['type'] = arglist[0]
             option_info['default'] = arglist[2]
             option_info['fname'] = filename
-            #print(arglist[0],arglist[1],arglist[2])
             desc = ""
             while True:
                 s = f.readline()
@@ -68,7 +58,6 @@ def analize_global(infile) :
                 m = re.search(re_comment,s)
                 if m :
                     desc = desc + m.group(1)
-                    #rint(m.group(1))
                 else :
                     break
                 if s.endswith(")")  :
@@ -117,13 +106,10 @@ def output_wiki() :
         print(f"|{info['name']}|{info['type']}|{info['default']}|{info['desc']}|")
     
 def output_option_info() :
-#    out.write("<table>")
-#    out.write("<tr><th>オプション</th><th>型</th><th>デフォルト</th><th>説明</th><th>定義ファイル</th></tr>")
     sorted_option_list = sorted(option_list, key=lambda option_info: option_info['name'])
     for info in sorted_option_list :
         out.write(f"<tr><td>{info['name']}</td><td>{info['type']}</td>"
                   f"<td>{info['default']}</td><td>{info['desc']}</td><td>{info['fname']}</td></tr>")
 
-#    out.write("</table>")
 #------------------------------------------------------
 main_proc()
